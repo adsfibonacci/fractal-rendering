@@ -1,0 +1,53 @@
+#+title: Fractal Rendering Using OpenGL
+#+author: Alexander Speigle
+#+setupfile: ~/.emacs.d/latex.org
+
+#+begin_src cpp
+#include <iostream>
+#include <unordered_map>
+#include <vector>
+#include <string>
+#include <typeinfo>
+#include <functional>
+#include <tuple>
+#include <memory>
+using namespace std;
+
+class varray {
+public:
+  varray() {}
+  ~varray() {}
+  bool operator==(varray& other) const {
+  	return this == &other;
+  }
+  varray* operator*() {return this;}
+  
+};
+
+void func(unordered_map<const varray*, int>& umap) {
+  varray* va = new varray();
+  umap[]
+}
+
+int main() {
+
+  varray v1 = varray();
+  varray v2 = varray();
+
+  cout << *v1 << "\t" << *v2 << endl;
+
+  cout << (*v1 == *v2) << endl;
+  cout << (*v1 == *v1) << endl;
+  cout << (v1 == v2) << endl;
+  cout << (v1 == v1) << endl;
+  
+  return 0;
+}
+#+end_src
+
+#+RESULTS:
+| 0x7ffda99cf256 | 0x7ffda99cf257 |
+|              0 |                |
+|              1 |                |
+|              0 |                |
+|              1 |                |
