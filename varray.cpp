@@ -45,23 +45,19 @@ const vbufferelement& vbufferlayout::operator[](unsigned int index) const {
 
 
 
-
 varray::varray() {
   GLCall(glGenVertexArrays(1, &m_renderid));
 }
 varray::~varray() {
   GLCall(glDeleteVertexArrays(1, &m_renderid));
 }
-
 void varray::bind() const {
   GLCall(glBindVertexArray(m_renderid));
 }
-
 void varray::unbind() const {
   GLCall(glBindVertexArray(0));
 }
-
-void varray::addbuffer(const vbuffer& vb, const vbufferlayout& layout) {  
+void varray::addbuffer(const vbuffer& vb, const vbufferlayout& layout) {
   if(m_vertex_data.find(&vb) != m_vertex_data.end()) {
 	std::cerr << "[WARNING]: VERTEXBUFFER ALREADY DEFINED" << std::endl;
 	return;
@@ -79,7 +75,6 @@ void varray::addbuffer(const vbuffer& vb, const vbufferlayout& layout) {
 	offset += tmp.count * tmp.get_size();
   }
 }
-
 void varray::addbuffer(const std::unordered_map<const vbuffer*, const vbufferlayout*>& umap) {
   for(const auto& [vb, layout] : umap) {
 	addbuffer(*vb, *layout);
@@ -90,26 +85,15 @@ std::unordered_map<const vbuffer*, const vbufferlayout*> varray::getbuffer() con
   return m_vertex_data;
 }
 
-varray* varray::operator*() {
-  return this;
+varray& varray::operator=(varray& other) {
+  if(this != &other) {
+	addbuffer(other.getbuffer());
+  }
+  return *this;
 }
-
-const varray* varray::operator*() const {
-  return this;
-}
-
-bool varray::operator==(varray& other) {
-  return this == &other;
-}
-
-bool varray::operator==(const varray& other) const {
-  return this == &other;
-}
-
-void varray::operator()(varray& other) {
-  addbuffer(other.getbuffer());
-}
-
-void varray::operator()(const varray& other) {
-  addbuffer(other.getbuffer());
+varray& varray::operator=(const varray& other) {
+  if(this != &other) {
+	addbuffer(other.getbuffer());
+  }
+  return *this;
 }

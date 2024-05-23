@@ -4,6 +4,7 @@
 #include "ibuffer.hpp"
 #include "varray.hpp"
 #include "shader.hpp"
+#include "shapes/circle.hpp"
 
 int main() {
   if (!glfwInit()){
@@ -75,9 +76,13 @@ int main() {
   std::unordered_map<const ibuffer*, const shader*> umap;
   umap[&ib] = &shad;
   umap[&ibb] = &shad;
+  
+  circle c({0.0f, 0.0f}, 0.5f, 100, &shad);
 
   render rend;
-  rend.add_mesh(&va, umap);
+  rend.add_mesh(c.get_vertex_array(), c.get_mapping());
+  //rend.add_mesh(&va, umap);
+  
   rend.unload();
   
   while (!glfwWindowShouldClose(window)) {

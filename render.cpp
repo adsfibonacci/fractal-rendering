@@ -11,6 +11,14 @@ void render::add_mesh(varray* va, std::unordered_map<const ibuffer*, const shade
 	m_varr[va].insert(is.begin(), is.end());
   }
 }
+void render::add_mesh(const varray* va, const std::unordered_map<const ibuffer*, const shader*>& is) {
+  if(m_varr.find(va) == m_varr.end()) {
+	m_varr[va] = is;
+  }
+  else {
+	m_varr[va].insert(is.begin(), is.end());
+  }
+}
 void render::unload() const {
   for(auto& [va, ub] : m_varr) {
 	va->unbind();

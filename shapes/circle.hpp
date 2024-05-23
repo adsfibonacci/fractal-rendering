@@ -14,21 +14,32 @@ const float PI = 2*acos(0.0);
 class circle {
 private:
   unsigned int m_samples;
-  unsigned int m_radius;
+  float m_radius;
 
   float m_angle;
 
   std::tuple<float, float> m_offset;
   std::vector<float> m_circumference;
   std::vector<unsigned int> m_indexing;
+  std::unordered_map<const ibuffer*, const shader*> m_umap;
+
+  varray va;
+  vbuffer vb;
+  vbufferlayout layout;
+  ibuffer ib;
+  const shader* m_shad;
 
 public:
-  circle(std::pair<float, float> off, unsigned int r, unsigned int s);
+  circle(std::pair<float, float> off, float r, unsigned int s, const shader* shad);
   ~circle();
   void addvertices();
   void addindexing();
+  void addshading();
 
-  std::pair<vbuffer, vbufferlayout> get_vertex_data();
+  const ibuffer* get_index_buffer() const;
+  const vbuffer* get_vertex_buffer() const;
+  const varray* get_vertex_array() const;
+  const std::unordered_map<const ibuffer*, const shader*>& get_mapping() const;
 };
 
 #endif //_CIRCLE2D_

@@ -50,12 +50,8 @@ public:
   void addbuffer(const std::unordered_map<const vbuffer*, const vbufferlayout*>& umap);
   std::unordered_map<const vbuffer*, const vbufferlayout*> getbuffer() const;
 
-  varray* operator*();
-  const varray* operator*() const;
-  bool operator==(varray& other);
-  bool operator==(const varray& other) const;
-  void operator()(varray& other);
-  void operator()(const varray& other);
+  varray& operator=(varray& other);
+  varray& operator=(const varray& other);
 };
 
 #endif //_VERTEXARRAYS_

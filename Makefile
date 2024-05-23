@@ -2,7 +2,7 @@ CXX = g++
 CXXFLAGS = -Wall -Werror -Wextra -pedantic -g -std=c++17
 LDFLAGS = -lGLEW -lglfw -lGL -lX11 -lpthread -ldl
 
-SOURCE = compute.cpp render.cpp varray.cpp ibuffer.cpp vbuffer.cpp shader.cpp syshead.cpp
+SOURCE = compute.cpp render.cpp varray.cpp ibuffer.cpp vbuffer.cpp shader.cpp syshead.cpp shapes/circle.cpp
 OBJECTS = $(SOURCE:.cpp=.o)
 TARGET = proj.out
 
@@ -16,4 +16,4 @@ $(TARGET): $(OBJECTS)
 
 .PHONY: clean
 clean:
-	rm -f *.o *.cpp~ *.hpp~ *~
+	rm -f *.o *.cpp~ *.hpp~ *~ shapes/*.o shapes/*.cpp~ shapes/*.hpp~ shapes/*~
