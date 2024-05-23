@@ -7,20 +7,15 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int* func(int* i) {
+pair<int, int*> func() {
   int v = 5;
-  i = &v;
-  return i;
+  cout << &v << endl;
+  return {v, &v};
 }
 
 int main() {
-  int l = 1;
-  int* k = &l;
-  k = func(k);
-
-  for(long i = 0; i < 10000000000; ++i) {*(k+sizeof(int)) = 0;}
-
-  cout << k << "\t" << *k << endl;
+  const auto& [i, p] = func();
+  cout << i << endl << p << endl << *p << endl;
     
   return 0;
 }

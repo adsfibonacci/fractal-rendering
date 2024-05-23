@@ -1,0 +1,5 @@
+#include "circle.hpp"
+
+circle::circle() : m_samples(0), m_radius(0) {}
+circle::circle(unsigned int r, unsigned int s) : m_samples(s), m_radius(r) {}
+

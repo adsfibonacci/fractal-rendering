@@ -5,8 +5,6 @@
 #include "varray.hpp"
 #include "shader.hpp"
 
-#include <map>
-
 int main() {
   if (!glfwInit()){
 	std::cout << "GLFW Failed" << std::endl;
@@ -36,7 +34,7 @@ int main() {
   //std::cout << sizeof(GLbyte) << std::endl;
   
   float positions[(2 * point_count - 1) * vertex_size] = {
-	-1.0f, -1.0f, 0.0f,
+	-0.8f, -1.0f, 0.0f,
 	+0.0f, -1.0f, 0.0f,
 	+0.0f, +0.0f, 0.0f,
 	-1.0f, +0.0f, 0.0f,

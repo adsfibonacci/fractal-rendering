@@ -37,6 +37,7 @@ public:
 class varray {
 private:
   unsigned int m_renderid;
+  std::unordered_map<const vbuffer*, const vbufferlayout*> m_vertex_data;
 
 public:
   varray();
@@ -46,12 +47,15 @@ public:
   void unbind() const;
   
   void addbuffer(const vbuffer& vb, const vbufferlayout& layout);
+  void addbuffer(const std::unordered_map<const vbuffer*, const vbufferlayout*>& umap);
+  std::unordered_map<const vbuffer*, const vbufferlayout*> getbuffer() const;
 
   varray* operator*();
   const varray* operator*() const;
   bool operator==(varray& other);
   bool operator==(const varray& other) const;
-  
+  void operator()(varray& other);
+  void operator()(const varray& other);
 };
 
 #endif //_VERTEXARRAYS_
