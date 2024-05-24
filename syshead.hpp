@@ -11,6 +11,7 @@
 #include <cassert>
 #include <typeinfo>
 #include <climits>
+#include <cmath>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>

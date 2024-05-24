@@ -5,6 +5,7 @@
 #include "varray.hpp"
 #include "shader.hpp"
 #include "shapes/circle.hpp"
+#include "shapes/bandwith.hpp"
 
 int main() {
   if (!glfwInit()){
@@ -35,7 +36,7 @@ int main() {
   //std::cout << sizeof(GLbyte) << std::endl;
   
   float positions[(2 * point_count - 1) * vertex_size] = {
-	-0.8f, -1.0f, 0.0f,
+	-1.0f, -1.0f, 0.0f,
 	+0.0f, -1.0f, 0.0f,
 	+0.0f, +0.0f, 0.0f,
 	-1.0f, +0.0f, 0.0f,
@@ -76,11 +77,25 @@ int main() {
   std::unordered_map<const ibuffer*, const shader*> umap;
   umap[&ib] = &shad;
   umap[&ibb] = &shad;
-  
-  circle c({0.0f, 0.0f}, 0.5f, 100, &shad);
+
+  std::vector<float> line1 = {
+	-0.9f, 0.9f, 0.0f,
+	-0.8f, 0.2f, 0.0f,
+	+0.3f, 0.5f, 0.0f,
+	+0.8f, 0.9f, 0.0f
+  };
+  std::vector<float> line2 = {
+	-0.9f, -0.9f, 0.0f,
+	-0.5f, -0.8f, 0.0f,
+	+0.0f, -0.5f, 0.0f,
+	+0.4f, -0.9f, 0.0f
+  };
+  circle c({0.0f, 0.0f}, 0.5f, 1000, &shad);
+  band b(line1, line2, &shad);
 
   render rend;
-  rend.add_mesh(c.get_vertex_array(), c.get_mapping());
+  rend.add_mesh(b.get_vertex_array(), b.get_mapping());
+  //rend.add_mesh(c.get_vertex_array(), c.get_mapping());
   //rend.add_mesh(&va, umap);
   
   rend.unload();
