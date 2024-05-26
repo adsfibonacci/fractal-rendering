@@ -18,12 +18,15 @@ void shader::unbind() const {
   GLCall(glUseProgram(0));
 }
 
-void shader::uniform1f(const std::string& name, float pos) {
+void shader::uniform1vf(const std::string& name, float pos) {
   GLCall(glUniform1f(get_uniform(name), pos));
 }
 
-void shader::uniform4f(const std::string& name, float pos[4]) {
+void shader::uniform4vf(const std::string& name, float pos[4]) {
   GLCall(glUniform4f(get_uniform(name), pos[0], pos[1], pos[2], pos[3]));
+}
+void shader::uniform4mf(const std::string& name, glm::mat4& m) {
+  GLCall(glUniformMatrix4fv(get_uniform(name), 1, GL_FALSE, glm::value_ptr(m)));
 }
 
 unsigned int shader::get_uniform(const std::string& name) {
@@ -68,8 +71,8 @@ unsigned int shader::create(const std::string& vshader, const std::string& fshad
   unsigned int vs = compile(GL_VERTEX_SHADER, vshader);
   unsigned int fs = compile(GL_FRAGMENT_SHADER, fshader);
 
-  GLCall(glAttachShader(program, vs));
   GLCall(glAttachShader(program, fs));
+  GLCall(glAttachShader(program, vs));
   GLCall(glLinkProgram(program));
   GLCall(glValidateProgram(program));
 

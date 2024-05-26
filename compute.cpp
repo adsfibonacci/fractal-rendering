@@ -33,8 +33,6 @@ int main() {
 	return -1;
   }
 
-  //std::cout << sizeof(GLbyte) << std::endl;
-  
   float positions[(2 * point_count - 1) * vertex_size] = {
 	-1.0f, -1.0f, 0.0f,
 	+0.0f, -1.0f, 0.0f,
@@ -65,30 +63,52 @@ int main() {
   
   float i = +0.05f;
   
-  float currTime = static_cast<float>(glfwGetTime());;
+  float curr_time = static_cast<float>(glfwGetTime());;
 
-  float ucolor[4] = {0.5f, 0.5f, 0.5f, 1.0f};
-  float& r = ucolor[0];
+  float fragment_color[4] = {0.5f, 0.5f, 0.5f, 1.0f};  
+  float& r = fragment_color[0];
+  glm::mat4 trans(1.0f);
+  trans = glm::translate(trans, glm::vec3(-.15f, 0.0f, 0.0f));
+  
   shader shad("shaders/vertex.shader", "shaders/fragment.shader");
   shad.bind();
-  shad.uniform4f("u_Color", ucolor);
-  shad.uniform1f("u_Time", currTime);
+  shad.uniform4vf("u_frag_color", fragment_color);
+  shad.uniform1vf("u_Time", curr_time);
+  shad.uniform4mf("u_Shift", trans);
 
   std::unordered_map<const ibuffer*, const shader*> umap;
   umap[&ib] = &shad;
   umap[&ibb] = &shad;
 
   std::vector<float> line1 = {
-	-0.9f, 0.9f, 0.0f,
-	-0.8f, 0.2f, 0.0f,
-	+0.3f, 0.5f, 0.0f,
-	+0.8f, 0.9f, 0.0f
+	0.0f, 0.8f, 0.0f,
+	0.25f, 0.7f, 0.0f,
+	0.5f, 0.5f, 0.0f,
+	0.8f, 0.0f, 0.0f,
+	0.5f, -0.5f, 0.0f,
+	0.25f, -0.7f, 0.0f,
+	0.0f, -0.8f, 0.0f,
+	-0.25f, -0.7f, 0.0f,
+	-0.5f, -0.5f, 0.0f,
+	-0.8f, -0.0f, 0.0f,
+	-0.5f, 0.5f, 0.0f,
+	-0.25f, 0.7f, 0.0f,
+	0.0f, 0.8f, 0.0f
   };
   std::vector<float> line2 = {
-	-0.9f, -0.9f, 0.0f,
-	-0.5f, -0.8f, 0.0f,
-	+0.0f, -0.5f, 0.0f,
-	+0.4f, -0.9f, 0.0f
+	0.0f, 0.25f, 0.0f,
+	0.15f, 0.20, 0.0f,
+	0.20f, 0.15f, 0.0f,
+	0.25f, 0.0f, 0.0f,
+	0.20f, -0.15f, 0.0f,
+	0.15f, -0.20f, 0.0f,
+	0.0f, -0.25f, 0.0f,
+	-0.15f, -0.20f, 0.0f,
+	-0.20f, -0.15f, 0.0f,
+	-0.25f, -0.0f, 0.0f,
+	-0.20f, 0.15f, 0.0f,
+	-0.15f, 0.20f, 0.0f,
+	0.0f, 0.25f, 0.0f
   };
   circle c({0.0f, 0.0f}, 0.5f, 1000, &shad);
   band b(line1, line2, &shad);
@@ -103,21 +123,22 @@ int main() {
   while (!glfwWindowShouldClose(window)) {
 	rend.clear();
 
-	currTime = static_cast<float>(glfwGetTime());
+	curr_time = static_cast<float>(glfwGetTime());
 	rend.draw();
 	
 	shad.bind();
-	shad.uniform4f("u_Color", ucolor);
-	shad.uniform1f("u_Time", currTime);	
+	shad.uniform4vf("u_frag_color", fragment_color);
+	shad.uniform1vf("u_Time", curr_time);
+	shad.uniform4mf("u_Shift", trans);
 
 	if (r >= 1.0f) i = -0.05f;
-	if (r <= 0.0f) i = +0.05f;
+	if (r <= 0.0f) i = +0.05f;	
 	
-	r += i;
+	r += 2*i;
 
 	glfwSwapBuffers(window);
 	glfwPollEvents();
-  }
+  }  
   
   glfwTerminate();
   return 0;

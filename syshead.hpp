@@ -16,6 +16,10 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 const unsigned int vertex_size = 3;
 const unsigned int point_count = 4;
 const unsigned int triangle_count = 2;
@@ -41,5 +45,8 @@ private:
 void GLClearError();
 
 bool GLLogCall(const char* function, const char* file, int line);
+
+std::ostream& operator<<(std::ostream& os, glm::vec4& v);
+std::ostream& operator<<(std::ostream& os, glm::mat4& m);
 
 #endif //_GLERRORS_

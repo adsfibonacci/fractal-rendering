@@ -3,7 +3,6 @@
 unsigned int vbufferelement::get_type() const {
   return (unsigned int)type;
 }
-
 unsigned int vbufferelement::get_size() const {
   unsigned int ret = count;
   switch (type) {

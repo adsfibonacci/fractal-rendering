@@ -18,8 +18,9 @@ public:
   void bind() const;
   void unbind() const;
   
-  void uniform1f(const std::string& name, float pos);
-  void uniform4f(const std::string& name, float pos[4]);
+  void uniform1vf(const std::string& name, float pos);
+  void uniform4vf(const std::string& name, float pos[4]);
+  void uniform4mf(const std::string& name, glm::mat4& m);
   unsigned int get_uniform(const std::string& name);  
   
   unsigned int compile(unsigned int type, const std::string& source);
