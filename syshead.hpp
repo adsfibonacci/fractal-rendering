@@ -20,6 +20,18 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+struct material {
+  float col[3];
+};
+struct light {
+  float col[3];
+};
+struct mvp {
+  glm::mat4 proj;
+  glm::mat4 view;
+  glm::mat4 mode;
+};
+
 const unsigned int vertex_size = 3;
 const unsigned int point_count = 4;
 const unsigned int triangle_count = 2;

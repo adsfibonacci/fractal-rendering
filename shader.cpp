@@ -1,8 +1,8 @@
 #include "shader.hpp"
 
-shader::shader(const std::string& vpath, const std::string& fpath) : m_vpath(vpath), m_fpath(fpath) {
-  std::string vert = read(vpath);
-  std::string frag = read(fpath);
+shader::shader(std::pair<const std::string, const std::string>& p) : m_vpath(p.first), m_fpath(p.second) {
+  std::string vert = read(p.first);
+  std::string frag = read(p.second);
   m_renderid = create(vert, frag);  
 }
 
@@ -13,20 +13,36 @@ shader::~shader() {
 void shader::bind() const {
   GLCall(glUseProgram(m_renderid));
 }
-
 void shader::unbind() const {
   GLCall(glUseProgram(0));
 }
 
-void shader::uniform1vf(const std::string& name, float pos) {
+void shader::uniform1vf(const std::string& name, const float pos) {
   GLCall(glUniform1f(get_uniform(name), pos));
 }
-
-void shader::uniform4vf(const std::string& name, float pos[4]) {
-  GLCall(glUniform4f(get_uniform(name), pos[0], pos[1], pos[2], pos[3]));
+void shader::uniform3vf(const std::string& name, const float* pos) {
+  GLCall(glUniform3fv(get_uniform(name), 1, pos));
 }
-void shader::uniform4mf(const std::string& name, glm::mat4& m) {
-  GLCall(glUniformMatrix4fv(get_uniform(name), 1, GL_FALSE, glm::value_ptr(m)));
+void shader::uniform4vf(const std::string& name, const float* pos) {
+  GLCall(glUniform4fv(get_uniform(name), 1, pos));
+}
+void shader::uniform4mf(const std::string& name, const glm::mat4& m) {
+  GLCall(glUniformMatrix4fv(get_uniform(name), 1, GL_FALSE, &m[0][0]));
+}
+
+void shader::uniform_light_source(const std::string& name, const light &l) {
+  //uniform3vf(name + ".pos", l.pos);
+  uniform3vf(name + ".col", l.col);
+  //uniform3vf(name + ".amb", l.amb);
+  //uniform3vf(name + ".dif", l.dif);
+  //uniform3vf(name + ".spc", l.spc);
+}
+void shader::uniform_material(const std::string& name, const material &m) {
+  uniform3vf(name + ".col", m.col);
+  //uniform3vf(name + ".amb", m.amb);
+  //uniform3vf(name + ".dif", m.dif);
+  //uniform3vf(name + ".spc", m.spc);
+  //uniform1vf(name + ".ref", m.ref);
 }
 
 unsigned int shader::get_uniform(const std::string& name) {
