@@ -36,12 +36,17 @@ const unsigned int vertex_size = 3;
 const unsigned int point_count = 4;
 const unsigned int triangle_count = 2;
 
-class null {
+const unsigned int w = 960;
+const unsigned int h = 540;
+
+struct null {
 private:
   null() {
 	(void)vertex_size;
 	(void)point_count;
 	(void)triangle_count;
+	(void)w;
+	(void)h;
   }
 };
 

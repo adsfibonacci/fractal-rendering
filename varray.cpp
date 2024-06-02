@@ -86,12 +86,14 @@ std::unordered_map<const vbuffer*, const vbufferlayout*> varray::getbuffer() con
 
 varray& varray::operator=(varray& other) {
   if(this != &other) {
+	GLCall(glGenVertexArrays(1, &m_renderid));
 	addbuffer(other.getbuffer());
   }
   return *this;
 }
 varray& varray::operator=(const varray& other) {
   if(this != &other) {
+	GLCall(glGenVertexArrays(1, &m_renderid));
 	addbuffer(other.getbuffer());
   }
   return *this;

@@ -4,14 +4,13 @@
 #include "ibuffer.hpp"
 #include "varray.hpp"
 #include "shader.hpp"
+#include "camera.hpp"
 #include "shapes/circle.hpp"
 #include "shapes/bandwith.hpp"
 
 int main() {
 
-  unsigned int w = 960;
-  unsigned int h = 540;
-  if (!glfwInit()){
+  if (!glfwInit()) {
 	std::cout << "GLFW Failed" << std::endl;
 	return -1;
   }
@@ -63,26 +62,28 @@ int main() {
   ibuffer ib(indices, 6);
   ibuffer ibb(order, 6);
   
-  float i = +0.05f;
-  float angle_inc = +0.001f;
+  //float i = +0.05f;
+  //float angle_inc = +0.001f;
   
   float curr_time = static_cast<float>(glfwGetTime());;
 
-  float fragment_color[4] = {0.5f, 0.5f, 0.5f, 1.0f};  
-  float& r = fragment_color[0];
+  //float fragment_color[4] = {0.5f, 0.5f, 0.5f, 1.0f};  
+  //float& r = fragment_color[0];
   //float angle = 0.0f;
   //float angle_increment = .05f;
-  float angle = 0.0f;
-  glm::vec3 rot{0.5f, 1.0f, 0.0f};
-  glm::mat4 trans(1.0f);
-  trans = glm::ortho(0.0f, (float)w, 0.0f, (float)h, 0.0f, 1000.0f);
-  trans = glm::rotate(trans, angle, rot);
-  //trans = glm::scale(trans, glm::vec3(.90f, 1.60f, 1.0f));
+  //float angle = 0.0f;
+  //glm::vec3 rot{0.5f, 1.0f, 0.0f};
+  //glm::mat4 trans(1.0f);
+  //trans = glm::ortho(0.0f, (float)w, 0.0f, (float)h, 0.0f, 1000.0f);
+  //trans = glm::rotate(trans, angle, rot);
 
   std::pair<const std::string, const std::string> paths = {
 	"shaders/vertex.shader",
 	"shaders/fragment.shader"
   };
+
+  glm::mat4 proj = glm::ortho(0.0f, (float)w, 0.0f, (float)h, -1000.0f, 1000.0f);
+  camera cam;
 
   material bronze{{0.4f, 0.8f, 0.1f}};
   light orange{{0.8f, 0.7f, 0.6f}};
@@ -91,7 +92,7 @@ int main() {
   shad.bind();
   //shad.uniform4vf("u_frag_color", fragment_color);
   shad.uniform1vf("u_Time", curr_time);
-  shad.uniform4mf("u_Shift", trans);
+  shad.uniform4mf("u_view", proj * cam.view());
   shad.uniform_material("u_bronze", bronze);
   shad.uniform_light_source("u_orange", orange);
   
@@ -132,50 +133,54 @@ int main() {
   //circle c({0.0f, 0.0f}, 0.5f, 1000, &shad);
   //band b(line1, line2, &shad);
 
-  float cube[8 * 3] = {
-	100.0f, 100.0f, 0.0f,
-	100.0f, 300.0f, 0.0f,
-	300.0f, 300.0f, 0.0f,
-	300.0f, 100.0f, 0.0f,
-	100.0f, 100.0f, 100.0f,
-	100.0f, 300.0f, 100.0f,
-	300.0f, 300.0f, 100.0f,
-	300.0f, 100.0f, 100.0f,
+  float tetra_vertices[4* vertex_size] = {
+	150.0f, 150.0f, 0.0f,
+	450.0f, 150.0f, 0.0f,
+	300.0f, 300.0f, -150.0f,
+	300.0f, 150.0f, -300.0f
   };
-  unsigned int cube_indices[6 * 2 * 3] {
+  unsigned int tetra_indices[4 * 3] = {
 	0, 1, 2,
-	2, 3, 0,
-	
-	4, 5, 6,
-	6, 7, 4,
-	
-	0, 1, 4,
-	4, 5, 1,
-	
-	1, 2, 5,
-	5, 6, 2,
-
-	2, 3, 6,
-	6, 7, 3,
-
-	0, 3, 4,
-	4, 7, 3
+	0, 2, 3,
+	0, 1, 3,
+	1, 2, 3
   };
-  varray cube_array;
-  vbuffer cube_vbuffer(cube, 8*3*sizeof(float));
-  cube_array.addbuffer(cube_vbuffer, layout);
-  ibuffer cube_ibuffer(cube_indices, 6*2*3);
+  varray tetra_array;
+  vbuffer tetra_vbuffer(tetra_vertices, 4*vertex_size*sizeof(float));
+  tetra_array.addbuffer(tetra_vbuffer, layout);
+  ibuffer tetra_ibuffer(tetra_indices, 4*3);
   
-  std::unordered_map<const ibuffer*, const shader*> cube_map;
-  cube_map[&cube_ibuffer] =  &shad;
+  std::unordered_map<const ibuffer*, const shader*> tetra_map;
+  tetra_map[&tetra_ibuffer] = &shad;
 
+  float square[4 * vertex_size] = {
+	400.0f, 400.0f, 0.0f,
+	400.0f, 600.0f, 0.0f,
+	600.0f, 600.0f, 0.0f,
+	600.0f, 400.0f, 0.0f
+  };
+  unsigned int square_indices[2 * 3] = {
+	0, 1, 2,
+	2, 3, 0
+  };
+  varray square_array;
+  vbuffer square_vbuffer(square, 4 * vertex_size * sizeof(float));
+  ibuffer square_ibuffer(square_indices, 4*2);
+  square_array.addbuffer(square_vbuffer, layout);
+  std::unordered_map<const ibuffer*, const shader*> square_umap;
+  square_umap[&square_ibuffer] = &shad;
   render rend;
-  rend.add_mesh(&cube_array, cube_map);
+  rend.add_mesh(&square_array, square_umap);
+  //rend.add_mesh(&tetra_array, tetra_map);
   //rend.add_mesh(b.get_vertex_array(), b.get_mapping());
   //rend.add_mesh(c.get_vertex_array(), c.get_mapping());
   //rend.add_mesh(&va, umap);
   
   rend.unload();
+
+  cam.set_global(glm::vec3(300.0f, 0.0f, 0.0f));
+
+  float inc = +.05f;
       
   while (!glfwWindowShouldClose(window)) {
 	rend.clear();
@@ -186,18 +191,14 @@ int main() {
 	shad.bind();
 	//shad.uniform4vf("u_frag_color", fragment_color);
 	shad.uniform1vf("u_Time", curr_time);
-	shad.uniform4mf("u_Shift", trans);
+	shad.uniform4mf("u_view", proj * cam.view());
 	shad.uniform_light_source("u_orange", orange);
 	shad.uniform_material("u_bronze", bronze);
 
-	if (r >= 1.0f) i = -0.05f;
-	if (r <= 0.0f) i = +0.05f;
-
-	if (angle >= 2*PI) angle = 0;
-
-	angle += angle_inc;
-	trans = glm::rotate(trans, angle, rot);	
-	r += 2*i;
+	cam.yaw_p(inc);
+	std::cout << cam << std::endl;
+	
+	//if (r <= 0.0f) i = +0.05f;
 
 	glfwSwapBuffers(window);
 	glfwPollEvents();

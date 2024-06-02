@@ -2,7 +2,7 @@ CXX = g++
 CXXFLAGS = -Wall -pedantic -g -std=c++17 -O3
 LDFLAGS = -lGLEW -lglfw -lGL -lX11 -lpthread -ldl
 
-SOURCE = compute.cpp render.cpp varray.cpp ibuffer.cpp vbuffer.cpp shader.cpp syshead.cpp shapes/circle.cpp shapes/bandwith.cpp shapes/shape.cpp
+SOURCE = compute.cpp render.cpp varray.cpp ibuffer.cpp vbuffer.cpp shader.cpp camera.cpp syshead.cpp shapes/circle.cpp shapes/bandwith.cpp shapes/shape.cpp
 OBJECTS = $(SOURCE:.cpp=.o)
 TARGET = proj.out
 

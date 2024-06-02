@@ -2,8 +2,14 @@
 
 layout(location=0) in vec4 position;
 
-uniform mat4 u_Shift;
+struct camera {
+	   mat4 model;
+	   mat4 view;
+	   mat4 proj;
+};
+
+uniform mat4 u_view;
 
 void main() {
-	 gl_Position = u_Shift * position;
+	 gl_Position = u_view * position;
 };
