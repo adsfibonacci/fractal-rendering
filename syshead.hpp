@@ -11,6 +11,7 @@
 #include <cassert>
 #include <typeinfo>
 #include <climits>
+#include <functional>
 #include <cmath>
 
 #include <GL/glew.h>

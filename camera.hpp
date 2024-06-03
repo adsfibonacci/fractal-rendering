@@ -6,19 +6,16 @@
 class camera {
 private:
   glm::mat4 m_view;
-  float m_global_x;
-  float m_global_y;
-  float m_global_z;
+  glm::mat4 m_proj;
+
+  glm::vec3 m_pos;
+  glm::vec3 m_up;
+  glm::vec3 m_front;
+
 public:
   camera();
   ~camera();
-
-  void set_global(glm::vec3 v) {
-	m_global_x = v[0];
-	m_global_y = v[1];
-	m_global_y = v[2];
-  }
-
+  
   void xdir_p(float x);
   void xdir_n(float x);
   void ydir_p(float y);
@@ -33,7 +30,11 @@ public:
   void roll_p(float r);
   void roll_n(float r);
 
-  const glm::mat4& view() const;
+  void inputs(GLFWwindow *window);
+  static void keyinputs(GLFWwindow *window, int key, int scancode, int action, int mods);
+  static void scrollinputs(GLFWwindow *window, double xoffset, double yoffset);
+
+  const glm::mat4 view() const;
 };
 
 std::ostream& operator<<(std::ostream& os, const camera& cam);
