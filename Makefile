@@ -6,7 +6,7 @@ SOURCE = compute.cpp render.cpp varray.cpp ibuffer.cpp vbuffer.cpp shader.cpp ca
 OBJECTS = $(SOURCE:.cpp=.o)
 TARGET = proj.out
 
-all: $(TARGET)
+all: clean $(TARGET) clean
 
 $(TARGET): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
